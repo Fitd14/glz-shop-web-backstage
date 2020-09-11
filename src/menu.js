@@ -39,11 +39,11 @@ var menus = [
   {
     action: "settings",
     title: "权限管理",
-    path:"/authority",
+    path:"/auth",
     items: [
-      { title: "权限管理", path: "/list" },
+      { title: "权限管理", path: "/manage" },
       { title: "角色管理", path: "/role" },
-      { title: "人员管理", path: "/member" }
+      { title: "人员管理", path: "/user" }
     ]
   }
 ]

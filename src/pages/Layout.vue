@@ -9,6 +9,7 @@
       enable-resize-watcher
       fixed
       app
+      width="200px"
     >
       <v-toolbar flat class="transparent">
         <v-list class="pa-0">
@@ -17,7 +18,7 @@
               <img src="../assets/2.jpeg">
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>虎哥</v-list-tile-title>
+              <v-list-tile-title> </v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>

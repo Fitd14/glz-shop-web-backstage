@@ -10,17 +10,17 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
-                <v-form>
-                  <v-text-field prepend-icon="person" v-model="username" label="用户名" type="text"/>
+                <v-form :model="fromLogin">
+                  <v-text-field prepend-icon="person" v-model="fromLogin.username" label="用户名" type="text"/>
                   <v-text-field
                     prepend-icon="lock"
-                    v-model="password"
+                    v-model="fromLogin.password"
                     label="密码"
-                    id="password"
-                    :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                    :append-icon-cb="() => (e1 = !e1)"
-                    :type="e1 ? 'text' : 'password'"
-                 ></v-text-field>
+                    id="password" >
+<!--                    :append-icon="e1 ? 'visibility' : 'visibility_off'"-->
+<!--                    :append-icon-cb="() => (e1 = !e1)"-->
+<!--                    :type="e1 ? 'text' : 'password'"-->
+                 </v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -42,21 +42,36 @@
 
 <script>
   export default {
-    data: () => ({
-      username: "",
-      password: "",
-      dialog: false,
-      e1:false
-    }),
+    data () {
+      return {
+        fromLogin: {
+          username: '',
+          password: ''
+        },
+        dialog: ''
+      }
+    },
     methods: {
       doLogin() {
-        if (!this.username || !this.password) {
-          this.dialog = true;
-          return false;
+        if (!this.fromLogin.username && this.fromLogin.username !== '' || !this.fromLogin.password && this.fromLogin.password !== '') {
+            this.dialog = true;
+            return false;
         }
-        console.log(this.username + " ... " + this.password);
-        this.$router.push("/");
-      }
+        let formData = new FormData();
+        formData.append("username",this.fromLogin.username);
+        formData.append("password",this.fromLogin.password);
+        this.$axios.post("/auth",formData,{
+          headers:{
+            'Accept' : '*/*',
+            'content-type': 'multipart/form-data',
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaXNzIjoidmlvc2F5IiwiZXhwIjoxNjAwODQ0MTU5LCJpYXQiOjE1OTk1NDgxNTl9.Q1X_RrVrF3tzcgYWKZWptrJRVE8EmVjOm2enk2p8I8o'
+          }
+        }).then(resp =>{
+          if(resp.code == "200"){
+            this.$router.push({path:'/index/dashboard'})
+          }
+        });
+      },
     }
   };
 </script>
