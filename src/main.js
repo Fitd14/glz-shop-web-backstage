@@ -16,6 +16,7 @@ Vue.use(Vuetify, { theme: config.theme})
 Vue.use(MyComponent)
 Vue.prototype.$qs = qs;
 
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

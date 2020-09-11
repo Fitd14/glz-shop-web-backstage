@@ -1,19 +1,19 @@
 <template>
   <v-card>
     <v-toolbar class="elevation-0">
-      <v-btn color="primary" @click="addGoods">新增商品</v-btn>
+      <v-btn color="primary" @click="addGoods" >新增商品</v-btn>
       <v-spacer/>
       <v-flex xs3>
         状态：
         <v-btn-toggle mandatory v-model.lazy="filter.saleable">
-          <v-btn flat>
-            全部
+          <v-btn flat :value=2>
+            其他：全部
           </v-btn>
-          <v-btn flat :value="true">
-            上架
+          <v-btn flat :value=0>
+            0：上架
           </v-btn>
-          <v-btn flat :value="false">
-            下架
+          <v-btn flat :value=1>
+            1：下架
           </v-btn>
         </v-btn-toggle>
       </v-flex>
@@ -23,7 +23,7 @@
           label="搜索"
           single-line
           hide-details
-          v-model="filter.search"
+          v-model="filter.putawayStatus"
         />
       </v-flex>
     </v-toolbar>
@@ -38,9 +38,12 @@
     >
       <template slot="items" slot-scope="props">
         <td class="text-xs-center">{{ props.item.id }}</td>
-        <td class="text-xs-center">{{ props.item.title }}</td>
-        <td class="text-xs-center">{{props.item.cname}}</td>
-        <td class="text-xs-center">{{ props.item.bname }}</td>
+        <td class="text-xs-center">{{ props.item.commodityName }}</td>
+        <td class="text-xs-center">{{props.item.category}}</td>
+        <td class="text-xs-center">{{ props.item.brand }}</td>
+        <td class="text-xs-center">{{props.item.price}}</td>
+        <td class="text-xs-center">{{ props.item.createTime }}</td>
+        <td class="text-xs-center">{{ props.item.updateTime }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon @click="editGoods(props.item)">
             <i class="el-icon-edit"/>
@@ -48,7 +51,7 @@
           <v-btn icon @click="deleteGoods(props.item)">
             <i class="el-icon-delete"/>
           </v-btn>
-          <v-btn icon v-if="props.item.saleable" @click="editSaleable(props.item)">下架</v-btn>
+          <v-btn icon v-if="props.item.putawayStatus === 1" @click="editSaleable(props.item)">下架</v-btn>
           <v-btn icon v-else @click="editSaleable(props.item)">上架</v-btn>
         </td>
       </template>
@@ -67,41 +70,41 @@
         </v-toolbar>
         <!--对话框的内容，表单-->
         <v-card-text class="px-3" style="height: 600px">
-          <goods-form :oldGoods="oldGoods" :step="step" @close="closeWindow" :is-edit="isEdit" ref="goodsForm"/>
+          <goods-form :oldGoods="this.oldGoods" :step="step" @close="closeWindow" :is-edit="isEdit" ref="goodsForm"/>
         </v-card-text>
-        <!--底部按钮，用来操作步骤线-->
-        <v-card-actions class="elevation-10">
-          <v-flex class="xs3 mx-auto">
-            <v-btn @click="previous" color="primary" :disabled="step === 1">上一步</v-btn>
-            <v-btn @click="next" color="primary" :disabled="step === 4">下一步</v-btn>
-          </v-flex>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-card>
 </template>
 
 <script>
+
   // 导入自定义的表单组件
   import GoodsForm from './GoodsForm'
-
+  var PATH = "http://localhost:80";
   export default {
     name: "goods",
     data() {
       return {
         filter: {
           saleable: true, // 上架还是下架
-          search: '', // 搜索过滤字段
+          putawayStatus: '', // 搜索过滤字段
+          pageNo: 0,
+          pageSize: 0,
         },
         totalGoods: 0, // 总条数
         goodsList: [], // 当前页品牌数据
         loading: true, // 是否在加载中
         pagination: {}, // 分页信息
+        goodtype: [],//商品分类信息
         headers: [
           {text: 'id', align: 'center', sortable: false, value: 'id'},
-          {text: '标题', align: 'center', sortable: false, value: 'title'},
-          {text: '商品分类', align: 'center', sortable: false, value: 'cname'},
-          {text: '品牌', align: 'center', value: 'bname', sortable: false,},
+          {text: '标题', align: 'center', sortable: false, value: 'commodityName'},
+          {text: '商品分类', align: 'center', sortable: false, value: 'category'},
+          {text: '品牌', align: 'center', sortable: false, value: 'brand'},
+          {text: '价格', align: 'center', sortable: false, value: 'price'},
+          {text: '创建时间', align: 'center', sortable: false, value: 'createTime'},
+          {text: '跟新时间', align: 'center', value: 'updateTime', sortable: false,},
           {text: '操作', align: 'center', sortable: false}
         ],
         show: false,// 控制对话框的显示
@@ -131,22 +134,26 @@
     },
     methods: {
       getDataFromServer() { // 从服务的加载数的方法。
-        // 发起请求
-        this.$http.get("/item/spu/page", {
-          params: {
-            key: this.filter.search, // 搜索条件
-            saleable: this.filter.saleable === 0 ? null : this.filter.saleable, // 上下架
-            page: this.pagination.page,// 当前页
-            rows: this.pagination.rowsPerPage,// 每页大小
+        //发起请求
+        this.$http.get(PATH + "/commodity/sel",
+          {
+            params: {
+            putawayStatus: this.filter.putawayStatus, // 搜索条件
+            //saleable:  this.filter.saleable, // 上下架
+            pageNo: this.pagination.page,// 当前页
+            pageSize: this.pagination.rowsPerPage,// 每页大小
           }
-        }).then(resp => { // 这里使用箭头函数
-          this.goodsList = resp.data.items;
-          this.totalGoods = resp.data.total;
+        }
+        ).then(resp => { // 这里使用箭头函数
+          this.goodsList = resp.data.data;
+          this.totalGoods = resp.data.data.length;
           // 完成赋值后，把加载状态赋值为false
           this.loading = false;
         })
+
       },
       addGoods() {
+        this.goodtype = this.$http.get(PATH+"/commodityCategory/selAll");
         // 修改标记
         this.isEdit = false;
         // 控制弹窗可见：
@@ -156,8 +163,8 @@
       },
       async editGoods(oldGoods) {
         // 发起请求，查询商品详情和skus
-        oldGoods.spuDetail = await this.$http.loadData("/item/spu/detail/" + oldGoods.id);
-        oldGoods.skus = await this.$http.loadData("/item/sku/list?id=" + oldGoods.id);
+        oldGoods = await this.$http.loadData(PATH+"/commodity/selectOne/" + oldGoods.id);
+        //oldGoods.skus = await this.$http.loadData(PATH+"/commodity/selectOne/" + oldGoods.id);
         // 修改标记
         this.isEdit = true;
         // 控制弹窗可见：
@@ -167,8 +174,9 @@
       },
       deleteGoods(item) {
         this.$message.confirm('此操作将永久删除该商品, 是否继续?').then(() => {
+          console.dir(item.id);
           // 发起删除请求
-          this.$http.delete("/item/goods/" + item.id)
+          this.$http.get(PATH+"/commodity/del/" + item.id)
               .then(() => {
                 // 删除成功
                 this.$message.success("删除成功！");
@@ -183,10 +191,10 @@
       },
       editSaleable(item) {
         // 发起请求
-        this.$http.put("/item/goods/saleable/" + item.id)
+        var status =item.putawayStatus==0?1:0;
+        this.$http.get(PATH+"/commodity/away?id="+item.id+"&putawayStatus="+status )
             .then(resp => { // 这里使用箭头函数
-              // 成功，改变商品的上下架状态
-              item.saleable = !item.saleable;
+              this.getDataFromServer();
             })
       },
       closeWindow() {
