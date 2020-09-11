@@ -1,5 +1,6 @@
 <template>
   <div>statistics</div>
+
 </template>
 
 <script>

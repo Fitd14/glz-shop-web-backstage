@@ -31,7 +31,7 @@
 
 <script>
     import {Upload} from 'element-ui';
-    import config from '../../config'
+    import config from '../../common/js/config'
 
     export default {
         name: "vUpload",
