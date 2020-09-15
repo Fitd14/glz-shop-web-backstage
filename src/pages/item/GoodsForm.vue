@@ -28,7 +28,6 @@
                 filterable
                 remote
                 placeholder="请选择二級分類 "
-                style="width:60%"
               >
                 <el-option
                   v-for="item in twotype"
