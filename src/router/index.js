@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import GoodsForm from "../pages/item/GoodsForm";
 
 
 Vue.use(Router)
@@ -27,11 +28,16 @@ export default new Router({
         route("/item/brand",'/item/Brand',"Brand"),
         route("/item/list",'/item/Goods',"Goods"),
         route("/item/specification",'/item/specification/Specification',"Specification"),
+        route("/item/specGroup",'/item/specification/SpecGroup',"SpecGroup"),
+        route("/item/specParam",'/item/specification/SpecParam',"SpecParam"),
         route("/user/statistics",'/item/Statistics',"Statistics"),
         route("/trade/promotion",'/trade/Promotion',"Promotion"),
         route("/auth/manage","/auth/AuthManage","Manage"),
         route("/auth/role","/auth/RoleManage","Role"),
-        route("/auth/user","/auth/UserManage","user")
+        route("/auth/user","/auth/UserManage","user"),
+        route("/item/goodsForm",'/item/GoodsForm',"GoodsForm"),
+        route("/item/editGoodsForm/:editId",'/item/EditGoodsForm',"EditGoodsForm"),
+        route("/item/checkGoodsForm/:checkId",'/item/CheckGoodsForm',"CheckGoodsForm"),
       ]
     }
   ]

@@ -15,7 +15,6 @@ import axios from "axios";
 import ElementUI from "element-ui";
 import VueRouter from "vue-router";
 
-
 Vue.use(Vuetify, { theme: config.theme})
 Vue.use(MyComponent)
 Vue.use(ElementUI)
@@ -23,7 +22,6 @@ Vue.use(VueRouter)
 
 Vue.prototype.$qs = qs;
 Vue.prototype.$axios = axios;// 将axios添加到 Vue的原型，这样一切vue实例都可以使用该对象
-
 
 Vue.config.productionTip = false
 
