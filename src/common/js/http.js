@@ -5,7 +5,8 @@ import JSONbig from 'json-bigint';
 
 // config中定义的基础路径是：http://api.leyou.com/api
 axios.defaults.baseURL = config.api; // 设置axios的基础请求路径
-axios.defaults.timeout = 200; // 设置axios的请求时间
+axios.defaults.timeout = 2000; // 设置axios的请求时间
+axios.defaults.headers.common['Authorization'] = store.state.token;
 axios.defaults.transformResponse = function(data){
   let parse = JSONbig.parse(data);
   return parse;
@@ -15,11 +16,14 @@ axios.defaults.transformResponse = function(data){
 axios.interceptors.request.use(
   config => {
     // 根据条件加入token-安全携带
+    if(store.state.token){
+      config.headers.common['Authorization'] = store.state.token;
+    }
     return config;
   },
   error => {
     // 请求错误处理
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 )
 
@@ -55,7 +59,6 @@ export function post(url, params = {}) {
       method: 'post',
       data: params
     }).then(response => {
-      console.log(response);
       if(response.code === "200"){
         Notification.success("成功");
       }
@@ -122,7 +125,7 @@ export function fileUpload(url, params = {}) {
       data: params,
       headers: { 'Content-Type': 'multipart/form-data' }
     }).then(response => {
-      if(response.status === 200){
+      if(response.code === "200"){
         Notification.success("上传文件成功");
       }
       resolve(response);
@@ -140,8 +143,9 @@ axios.interceptors.response.use(
     if (res.code === '401' || res.code === '500' || res.code === '400') { // 需自定义
       // 返回异常
       Notification.error(res.message);
+    } else {
+      return response.data;
     }
-    return response.data;
   },
   // 处理处理
   error => {
