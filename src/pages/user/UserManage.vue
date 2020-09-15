@@ -1,15 +1,16 @@
 <template>
   <el-card>
     <div slot="header" >
-      <span>权限控制</span>
-      <el-button style="float: right;" @click="openAddDialog">添加账户权限</el-button>
-      <el-button style="float: right;" @click="linkAllMenu">查看所有权限</el-button>
+      <span>会员管理</span>
     </div>
     <el-row >
       <el-col>
         <el-table :data="AuthDataAll" style="width: 100%">
-          <el-table-column prop="userId.username" label="人员名称" ></el-table-column>
-          <el-table-column prop="roleId.name" label="角色名称"></el-table-column>
+          <el-table-column prop="userId.username" label="用户名称" ></el-table-column>
+          <el-table-column prop="userId.nickname" label="用户昵称" ></el-table-column>
+          <el-table-column prop="roleId.name" label="手机号"></el-table-column>
+          <el-table-column prop="roleId.name" label="邮箱"></el-table-column>
+          <el-table-column prop="roleId.name" label="创建时间"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button type="primary" icon="el-icon-edit" circle @click="openModify(scope.$index,scope.row)"></el-button>
@@ -62,7 +63,6 @@
 </template>
 <script>
   import {del, get, post, put} from "../../common/js/http";
-  const api = "/role/";
   export default {
     data(){
       return {
@@ -84,7 +84,7 @@
     },
     methods: {
       getRoleAuthAll() {
-        get(api+"user/getAll").then(resp => {
+        get("/user/member").then(resp => {
           this.AuthDataAll = resp.data;
         });
       },
@@ -146,8 +146,8 @@
       linkUserMenu(index,row){
         console.log(row);
         this.$router.push({name:"Menu",params:{
-          userId:row.userId.id
-        }});
+            userId:row.userId.id
+          }});
       },
     }
   }

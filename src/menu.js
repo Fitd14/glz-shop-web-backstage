@@ -21,8 +21,7 @@ var menus = [
     title: "会员管理",
     path:"/user",
     items: [
-      { title: "会员统计", path: "/statistics" },
-      { title: "会员管理", path: "/list" }
+      { title: "会员管理", path: "/UserManage" }
     ]
   },
   {
