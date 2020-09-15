@@ -9,10 +9,11 @@
         <v-flex class="xs10 mx-auto">
           <v-form v-model="valid" ref="basic">
             <div>
-              <el-select
+              <el-select class="el-select"
                 v-model="goods.category"
                 @change="selectExitSelectConfig"
                 placeholder="请选择商品類型"
+
               >
                 <el-option
                   v-for="item in type"
@@ -206,4 +207,7 @@
   };
 </script>
 <style scoped>
+  .el-select {
+    width: 200px;
+  }
 </style>

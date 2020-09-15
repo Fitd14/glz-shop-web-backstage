@@ -12,7 +12,7 @@
               <v-btn color="info" @click="rollback()">返回</v-btn>
             </v-flex>
             <div>
-              <el-select
+              <el-select class="el-select"
                 v-model="goods.category"
                 @change="selectExitSelectConfig"
                 filterable
@@ -24,6 +24,7 @@
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
+                  disabled="disabled"
                 />
               </el-select>
               <span>-----</span>
@@ -40,6 +41,7 @@
                   :key="t.id"
                   :label="t.name"
                   :value="t.id"
+                  disabled="disabled"
                 />
               </el-select>
             </div>
@@ -199,4 +201,7 @@
 </script>
 
 <style scoped>
+  .el-select {
+    width: 200px;
+  }
 </style>
