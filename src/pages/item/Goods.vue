@@ -30,7 +30,8 @@
     <v-data-table
       :headers="headers"
       :items="goodsList"
-      :pagination.sync="pagination"
+     
+      :items-per-page="5"
       :total-items="totalGoods"
       :loading="loading"
       class="elevation-1"
@@ -57,7 +58,7 @@
           <v-btn icon v-else @click="editSaleable(props.item)">上架</v-btn>
           <v-btn v-if="props.item.status===1" @click="CheckShop(props.item)">审核商品</v-btn>
           <v-btn v-else-if="props.item.status===0" >审核已通过</v-btn>
-          <v-btn v-else="props.item.status===2" >再次审核</v-btn>
+          <v-btn v-else="props.item.status===2" @click="CheckShop(props.item)">再次审核</v-btn>
         </td>
       </template>
     </v-data-table>
