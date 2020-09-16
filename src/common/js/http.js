@@ -3,7 +3,6 @@ import config from './config'
 import { Notification } from 'element-ui';
 import JSONbig from 'json-bigint';
 import store from "./store";
-// config中定义的基础路径是：http://api.leyou.com/api
 axios.defaults.baseURL = config.api; // 设置axios的基础请求路径
 axios.defaults.timeout = 2000; // 设置axios的请求时间
 axios.defaults.headers.common['Authorization'] = store.state.token;
@@ -143,9 +142,8 @@ axios.interceptors.response.use(
     if (res.code === '401' || res.code === '500' || res.code === '400') { // 需自定义
       // 返回异常
       Notification.error(res.message);
-    } else {
-      return response.data;
     }
+      return response.data;
   },
   // 处理处理
   error => {
