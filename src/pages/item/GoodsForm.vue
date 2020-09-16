@@ -147,6 +147,7 @@
         console.log(value);
       },
       selectExitSelectConfig(val){
+        console.log(val);
         get('/commodityCategory/selById?id='+val).then(res=>{
           console.log(res)
           if (res.data.children==null){
@@ -191,14 +192,14 @@
             console.log(this.goods);
           }
 
-         /* post("/commodity/save", this.goods).then(() => {
+          post("/commodity/save", this.goods).then(() => {
             // 提示成功
             this.$message.success("保存成功了");
             this.rollback();
           })
             .catch(() => {
               this.$message.error("保存失败！");
-            });*/
+            });
         },
         upload(event) {
           for (let i = 0; i < event.target.files.length; i++) {
