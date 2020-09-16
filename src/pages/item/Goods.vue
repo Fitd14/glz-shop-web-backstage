@@ -138,7 +138,6 @@
         ).then(resp => { // 这里使用箭头函数
           for (let i = 0; i <resp.data.length ; i++) {
           }
-
           this.goodsList = resp.data;
           console.log(this.goodsList);
           this.totalGoods = resp.data.length;
