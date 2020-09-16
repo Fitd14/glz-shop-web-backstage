@@ -31,7 +31,6 @@
       :headers="headers"
       :items="goodsList"
       :pagination.sync="pagination"
-      :items-per-page="5"
       :total-items="totalGoods"
       :loading="loading"
       class="elevation-1"
@@ -133,7 +132,7 @@
             // params: {
             putawayStatus: this.filter.putawayStatus, // 搜索条件
             //saleable:  this.filter.saleable, // 上下架
-            pageNo: 0,// 当前页
+            pageNo: this.pagination.page-1,// 当前页
             pageSize: this.pagination.rowsPerPage,// 每页大小
         }
         ).then(resp => { // 这里使用箭头函数
