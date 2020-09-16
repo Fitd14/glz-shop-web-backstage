@@ -10,7 +10,7 @@
           <v-form v-model="valid" ref="basic">
             <div>
               <el-select class="el-select"
-                v-model="goods.category"
+                v-model="parentTypeId"
                 @change="selectExitSelectConfig"
                 placeholder="请选择商品類型"
 
@@ -24,7 +24,7 @@
               </el-select>
               <span>-----</span>
               <el-select
-                v-model="goods.category"
+                v-model="childrenTypeId"
                 filterable
                 remote
                 placeholder="请选择二級分類 "
@@ -113,6 +113,8 @@
         twotype:[],
         goodstype:[],
         valid: false,
+        parentTypeId:'',
+        childrenTypeId:'',
         goods: {
           category: '', // 商品分类信息
           brand: '', // 品牌信息
@@ -181,14 +183,22 @@
           this.goods.photo = url;
           console.dir(this.goods.photo);
           console.log(this.goods.photo);*/
-          post("/commodity/save", this.goods).then(() => {
+          if (this.childrenTypeId != ''){
+            this.goods.category = this.childrenTypeId;
+            console.log(this.goods);
+          }else {
+            this.goods.category = this.parentTypeId;
+            console.log(this.goods);
+          }
+
+         /* post("/commodity/save", this.goods).then(() => {
             // 提示成功
             this.$message.success("保存成功了");
             this.rollback();
           })
             .catch(() => {
               this.$message.error("保存失败！");
-            });
+            });*/
         },
         upload(event) {
           for (let i = 0; i < event.target.files.length; i++) {
