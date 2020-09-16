@@ -31,6 +31,8 @@ const router = new Router({
         route("/item/category",'/item/Category',"Category"),
         route("/item/brand",'/item/Brand',"Brand"),
         route("/item/list",'/item/Goods',"Goods"),
+        route("/advertise/adver","/advertise/Adver","Adver"),
+        route("/advertise/newProduct","/advertise/NewProduct","NewProduct"),
         route("/item/specification",'/item/specification/Specification',"Specification"),
         route("/item/specGroup",'/item/specification/SpecGroup',"SpecGroup"),
         route("/item/specParam",'/item/specification/SpecParam',"SpecParam"),
