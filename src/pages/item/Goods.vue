@@ -136,11 +136,11 @@
             pageSize: this.pagination.rowsPerPage,// 每页大小
         }
         ).then(resp => { // 这里使用箭头函数
-          for (let i = 0; i <resp.data.length ; i++) {
-          }
+          get("/commodity/selectAll").then(res=>{
+            this.totalGoods = res.data.length;
+          })
           this.goodsList = resp.data;
           console.log(this.goodsList);
-          this.totalGoods = resp.data.length;
           // 完成赋值后，把加载状态赋值为false
           this.loading = false;
         });
