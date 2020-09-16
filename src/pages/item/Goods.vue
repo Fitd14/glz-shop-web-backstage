@@ -30,7 +30,7 @@
     <v-data-table
       :headers="headers"
       :items="goodsList"
-     
+      :pagination.sync="pagination"
       :items-per-page="5"
       :total-items="totalGoods"
       :loading="loading"
