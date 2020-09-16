@@ -18,7 +18,7 @@
               <img src="../assets/2.jpeg">
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title></v-list-tile-title>
+              <a href="javascript:void(0)"><el-button type="text" @click="logout">退出登录</el-button></a>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import { get } from '../common/js/http';
   import menus from "../menu";
 
   export default {
@@ -137,6 +138,11 @@
           this.menuMap[p1][i.path.slice(1)] = i.title;
         })
       })
+    },methods:{
+      logout(){
+        get('/logout');
+        this.$router.push('/login');
+      }
     }
   }
 </script>
