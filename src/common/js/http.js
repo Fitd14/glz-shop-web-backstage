@@ -143,9 +143,8 @@ axios.interceptors.response.use(
     if (res.code === '401' || res.code === '500' || res.code === '400') { // 需自定义
       // 返回异常
       Notification.error(res.message);
-    } else {
-      return response.data;
     }
+      return response.data;
   },
   // 处理处理
   error => {

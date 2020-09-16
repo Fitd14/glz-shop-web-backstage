@@ -55,7 +55,9 @@
           </v-btn>
           <v-btn icon v-if="props.item.putawayStatus === 1" @click="editSaleable(props.item)">下架</v-btn>
           <v-btn icon v-else @click="editSaleable(props.item)">上架</v-btn>
-          <v-btn  @click="CheckShop(props.item)">审核商品</v-btn>
+          <v-btn v-if="props.item.status===1" @click="CheckShop(props.item)">审核商品</v-btn>
+          <v-btn v-else-if="props.item.status===0" >审核已通过</v-btn>
+          <v-btn v-else="props.item.status===2" >再次审核</v-btn>
         </td>
       </template>
     </v-data-table>
