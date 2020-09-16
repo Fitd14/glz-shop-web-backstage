@@ -57,7 +57,7 @@
           <v-btn icon v-else @click="editSaleable(props.item)">上架</v-btn>
           <v-btn v-if="props.item.status===1" @click="CheckShop(props.item)">审核商品</v-btn>
           <v-btn v-else-if="props.item.status===0" >审核已通过</v-btn>
-          <v-btn v-else="props.item.status===2" >再次审核</v-btn>
+          <v-btn v-else="props.item.status===2" @click="CheckShop(props.item)">再次审核</v-btn>
         </td>
       </template>
     </v-data-table>
@@ -132,16 +132,15 @@
             // params: {
             putawayStatus: this.filter.putawayStatus, // 搜索条件
             //saleable:  this.filter.saleable, // 上下架
-            pageNo: 0,// 当前页
+            pageNo: this.pagination.page-1,// 当前页
             pageSize: this.pagination.rowsPerPage,// 每页大小
         }
         ).then(resp => { // 这里使用箭头函数
-          for (let i = 0; i <resp.data.length ; i++) {
-          }
-
+          get("/commodity/selectAll").then(res=>{
+            this.totalGoods = res.data.length;
+          })
           this.goodsList = resp.data;
           console.log(this.goodsList);
-          this.totalGoods = resp.data.length;
           // 完成赋值后，把加载状态赋值为false
           this.loading = false;
         });
