@@ -9,6 +9,7 @@
       enable-resize-watcher
       fixed
       app
+      width="200px"
     >
       <v-toolbar flat class="transparent">
         <v-list class="pa-0">
@@ -17,7 +18,7 @@
               <img src="../assets/2.jpeg">
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>虎哥</v-list-tile-title>
+              <a href="javascript:void(0)"><el-button type="text" @click="logout">退出登录</el-button></a>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -101,6 +102,7 @@
 </template>
 
 <script>
+import { get } from '../common/js/http';
   import menus from "../menu";
 
   export default {
@@ -109,7 +111,7 @@
         dark: false,// 是否暗黑主题
         drawer: true,// 左侧导航是否隐藏
         miniVariant: false,// 左侧导航是否收起
-        title: '乐优商城后台管理',// 顶部导航条名称,
+        title: '高老庄商城后台管理',// 顶部导航条名称,
         menuMap: {}
       }
     },
@@ -136,6 +138,11 @@
           this.menuMap[p1][i.path.slice(1)] = i.title;
         })
       })
+    },methods:{
+      logout(){
+        get('/logout');
+        this.$router.push('/login');
+      }
     }
   }
 </script>

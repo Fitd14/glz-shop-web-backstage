@@ -10,7 +10,7 @@ var menus = [
     title: "商品管理",
     path:"/item",
     items: [
-      { title: "分类管理", path: "/category" },
+      { title: "分类管理", path: "/specGroup" },
       { title: "品牌管理", path: "/brand" },
       { title: "商品列表", path: "/list" },
       { title: "规格参数", path: "/specification" }
@@ -21,8 +21,7 @@ var menus = [
     title: "会员管理",
     path:"/user",
     items: [
-      { title: "会员统计", path: "/statistics" },
-      { title: "会员管理", path: "/list" }
+      { title: "会员管理", path: "/UserManage" }
     ]
   },
   {
@@ -39,11 +38,11 @@ var menus = [
   {
     action: "settings",
     title: "权限管理",
-    path:"/authority",
+    path:"/auth",
     items: [
-      { title: "权限管理", path: "/list" },
+      { title: "权限管理", path: "/manage" },
       { title: "角色管理", path: "/role" },
-      { title: "人员管理", path: "/member" }
+      { title: "人员管理", path: "/user" }
     ]
   }
 ]
