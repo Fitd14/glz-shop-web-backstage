@@ -174,7 +174,6 @@
         pojo = this.vertify;
         pojo.status = 0;
         pojo.productId = this.goods.id;
-        pojo.vertityName= "1";
         console.log(pojo);
         post("/commodityVertityRecord/add",pojo).then(()=>{
             this.$confirm("审核成功");
@@ -187,7 +186,6 @@
         pojo = this.vertify;
         pojo.status = 2;
         pojo.productId = this.goods.id;
-        pojo.vertityName= "1";
         post("/commodityVertityRecord/add",pojo).then(()=>{
           this.$confirm("商品不合格");
           this.$router.push({name:'Goods'});
