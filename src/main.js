@@ -14,13 +14,13 @@ import './assets/material.css'
 import axios from "axios";
 import ElementUI from "element-ui";
 import VueRouter from "vue-router";
-
-
+import ViewUi from 'view-design';
+import 'view-design/dist/styles/iview.css';
+Vue.use(ViewUi)
 Vue.use(Vuetify, { theme: config.theme})
 Vue.use(MyComponent)
 Vue.use(ElementUI)
 Vue.use(VueRouter)
-
 Vue.prototype.$qs = qs;
 Vue.prototype.$axios = axios;// 将axios添加到 Vue的原型，这样一切vue实例都可以使用该对象
 
