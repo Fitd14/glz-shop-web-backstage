@@ -17,6 +17,15 @@ var menus = [
     ]
   },
   {
+    action: "attach_money",
+    title: "广告管理",
+    path:"/advertise",
+    items: [
+      { title: "轮播广告", path: "/adver" },
+      { title: "商品活动", path: "/newProduct" },
+    ]
+  },
+  {
     action: "people",
     title: "会员管理",
     path:"/user",
