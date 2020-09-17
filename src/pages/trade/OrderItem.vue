@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div>n
     <div>
       <el-table border
                 :data="datas.slice((currentPage-1)* pageSize,currentPage* pageSize)"
