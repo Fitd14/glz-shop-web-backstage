@@ -1,27 +1,32 @@
 <template>
   <el-card>
     <div slot="header" >
-      <span>权限控制</span>
-      <el-button style="float: right;" @click="openAddDialog">添加账户权限</el-button>
-      <el-button style="float: right;" @click="linkAllMenu">查看所有权限</el-button>
+      <span>会员管理</span>
     </div>
     <el-row >
       <el-col>
-        <el-table :data="AuthDataAll" style="width: 100%">
-          <el-table-column prop="userId.username" label="人员名称" ></el-table-column>
-          <el-table-column prop="roleId.name" label="角色名称"></el-table-column>
-          <el-table-column label="操作">
+        <el-table :data="member" style="width: 100%">
+          <el-table-column prop="username" label="用户名称" ></el-table-column>
+          <el-table-column prop="nickname" label="用户昵称" ></el-table-column>
+          <el-table-column prop="phone" label="手机号"></el-table-column>
+          <el-table-column prop="gender" label="性别">
+            <template slot-scope="scope">
+                <p v-text="genderChange(scope.row,scope.row.gender,scope.$index)"></p>
+            </template>
+          </el-table-column>
+          <el-table-column prop="birthday" label="生日"></el-table-column>
+          <!-- <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button type="primary" icon="el-icon-edit" circle @click="openModify(scope.$index,scope.row)"></el-button>
               <el-button type="primary" icon="el-icon-setting" circle @click="linkUserMenu(scope.$index,scope.row)"></el-button>
               <el-button type="danger" icon="el-icon-delete" circle @click="del(scope.$index,scope.row)"></el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
       </el-col>
     </el-row>
 
-    <el-dialog title="修改账户角色" :visible.sync="dialogFormModify"  width="30%" center="center">
+    <!-- <el-dialog title="修改账户角色" :visible.sync="dialogFormModify"  width="30%" center="center">
       <el-form :model="roleUserData">
         <el-form-item label="人员名称" :label-width="dialogWidth" >
           <el-select v-model="roleUserData.userId" placeholder="请选择" auto-complete="off">
@@ -57,22 +62,15 @@
         <el-button @click="dialogFormAdd = false">取 消</el-button>
         <el-button type="primary" @click="confirmAdd">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </el-card>
 </template>
 <script>
   import {del, get, post, put} from "../../common/js/http";
-  const api = "/role/";
   export default {
     data(){
       return {
-        AuthDataAll:[],
-        roleUserData:{
-          roleId:null,
-          userId:null
-        },
-        UserDataAll:[],
-        RoleDataAll:[],
+        member:[],
         dialogFormModify: false,
         dialogFormAdd: false,
         dialogWidth:'120px',
@@ -84,8 +82,9 @@
     },
     methods: {
       getRoleAuthAll() {
-        get(api+"user/getAll").then(resp => {
-          this.AuthDataAll = resp.data;
+        get("/user/member/getAll").then(resp => {
+          this.member = resp.data;
+          // console.log("member="+this.member);
         });
       },
       openModify(index,row){
@@ -132,23 +131,15 @@
         this.getRoleAndUser();
         this.dialogFormAdd = true;
       },
-      getRoleAndUser(){
-        get("/user/all").then(result => {
-          this.UserDataAll = result.data;
-        })
-        get(api+"getAll").then(result =>{
-          this.RoleDataAll = result.data;
-        })
-      },
-      linkAllMenu(){
-        this.$router.push("AllAuth");
-      },
-      linkUserMenu(index,row){
-        console.log(row);
-        this.$router.push({name:"Menu",params:{
-          userId:row.userId.id
-        }});
-      },
+      genderChange(row,data,index){
+        if(data === 0){
+          return '男'
+        }else if(data === 1){
+          return '女'
+        }else{
+          return '未知'
+        }
+      }
     }
   }
 </script>

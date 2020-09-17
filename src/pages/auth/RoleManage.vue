@@ -12,6 +12,7 @@
           <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="primary" icon="el-icon-edit" circle @click="openModify(scope.$index,scope.row)"></el-button>
+                <el-button type="primary" icon="el-icon-setting" circle @click="linkUserMenu(scope.$index,scope.row)"></el-button>
                 <el-button type="danger" icon="el-icon-delete" circle @click="del(scope.$index,scope.row)"></el-button>
               </template>
           </el-table-column>
@@ -118,7 +119,12 @@
         this.roleData.name = null;
         this.roleData.code = null;
         this.dialogFormAdd = true;
-      }
+      },
+      linkUserMenu(index,row){
+        this.$router.push({name:"RoleMenu",params:{
+            roleId:row.id
+          }});
+      },
     },
     // watch:{
     //   '$route':'getRoleAll'

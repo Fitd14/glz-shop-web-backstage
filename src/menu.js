@@ -10,10 +10,19 @@ var menus = [
     title: "商品管理",
     path:"/item",
     items: [
-      { title: "分类管理", path: "/category" },
+      { title: "分类管理", path: "/specGroup" },
       { title: "品牌管理", path: "/brand" },
       { title: "商品列表", path: "/list" },
       { title: "规格参数", path: "/specification" }
+    ]
+  },
+  {
+    action: "attach_money",
+    title: "广告管理",
+    path:"/advertise",
+    items: [
+      { title: "轮播广告", path: "/adver" },
+      { title: "商品活动", path: "/newProduct" },
     ]
   },
   {
@@ -21,8 +30,7 @@ var menus = [
     title: "会员管理",
     path:"/user",
     items: [
-      { title: "会员统计", path: "/statistics" },
-      { title: "会员管理", path: "/list" }
+      { title: "会员管理", path: "/UserManage" }
     ]
   },
   {
