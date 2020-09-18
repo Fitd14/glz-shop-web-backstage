@@ -4,7 +4,7 @@ import { Notification } from 'element-ui';
 import JSONbig from 'json-bigint';
 import store from "./store";
 axios.defaults.baseURL = config.api; // 设置axios的基础请求路径
-axios.defaults.timeout = 3000; // 设置axios的请求时间
+axios.defaults.timeout = 2000; // 设置axios的请求时间
 axios.defaults.headers.common['Authorization'] = store.state.token;
 axios.defaults.transformResponse = function(data){
   let parse = JSONbig.parse(data);
