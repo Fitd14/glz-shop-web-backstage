@@ -69,12 +69,13 @@
       </v-card>
     </v-dialog>
   </v-card>
-    
+
 </template>
 
 <script>
      // 导入自定义的表单组件
-  import BrandForm from './AdverForm'
+  import BrandForm from './AdverForm';
+  import {get,post} from "../../common/js/http";
   var url = 'http://localhost:80/shop/adver/'
   export default {
     name: "adver",
@@ -126,20 +127,19 @@
     methods: {
       getDataFromServer() { // 从服务的加载数的方法。
         // 发起请求
-        this.$http.get(url + "getAllList", {
-          params: {
-            key: this.search, // 搜索条件
-            page: this.pagination.page,// 当前页
+        get("/shop/adver/getAllList", {
+            // key: this.search, // 搜索条件
+            page: this.pagination.page-1,// 当前页
             rows: this.pagination.rowsPerPage,// 每页大小
-            sortBy: this.pagination.sortBy,// 排序字段
-            desc: this.pagination.descending// 是否降序
-          }
+            // sortBy: this.pagination.sortBy,// 排序字段
+            // desc: this.pagination.descending// 是否降序
+
         }).then(resp => { // 这里使用箭头函数
           // 品牌数据
           console.dir(resp);
-          this.advertises = resp.data.data;
+          this.advertises = resp.data;
           // 总条数
-          this.totalBrands = resp.data.data.length;
+          this.totalBrands = resp.data.length;
           // 完成赋值后，把加载状态赋值为false
           this.loading = false;
         })
@@ -154,7 +154,7 @@
       },
       editBrand(oldAdver) {
         // 根据品牌信息查询商品分类
-        this.$http.get(url + "getId/" + oldAdver.id)
+        get(  "/shop/adver/getId/" + oldAdver.id)
             .then(({data}) => {
               console.dir(({data}));
               // 修改标记
@@ -170,7 +170,7 @@
       deleteAdver(item) {
         this.$message.confirm('此操作将永久删除该品牌, 是否继续?').then(() => {
           // 发起删除请求
-          this.$http.delete(url + "delete/" + item.id)
+          get( "/shop/adver/delete/" + item.id)
               .then(() => {
                 // 删除成功
                 this.$message.success("删除成功！");

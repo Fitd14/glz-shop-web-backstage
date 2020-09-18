@@ -61,7 +61,8 @@
 
 <script>
      // 导入自定义的表单组件
-  import BrandForm from './NewProductFrom'
+  import BrandForm from './NewProductFrom';
+     import {get,post} from "../../common/js/http";
   var url = 'http://localhost:80/shop/newProduct/';
 
   export default {
@@ -107,7 +108,7 @@
     methods: {
       getDataFromServer() { // 从服务的加载数的方法。
         // 发起请求
-        this.$http.get(url + "getList", {
+        get("/shop/newProduct/getList", {
           params: {
             key: this.search, // 搜索条件
             page: this.pagination.page,// 当前页
@@ -118,9 +119,9 @@
         }).then(resp => { // 这里使用箭头函数
           // 品牌数据
           console.dir(resp);
-          this.brands = resp.data.data;
+          this.brands = resp.data;
           // 总条数
-          this.totalBrands = resp.data.total;
+          this.totalBrands = resp.data.length;
           // 完成赋值后，把加载状态赋值为false
           this.loading = false;
         })
@@ -135,7 +136,7 @@
       },
       editBrand(oldBrand) {
         // 根据品牌信息查询商品分类
-        this.$http.get(url+"getId/" + oldBrand.id)
+        get("/shop/newProduct/getId/" + oldBrand.id)
             .then(({data}) => {
               // 修改标记
               this.isEdit = false;
@@ -150,7 +151,7 @@
       deleteBrand(item) {
         this.$message.confirm('此操作将永久删除该品牌, 是否继续?').then(() => {
           // 发起删除请求
-          this.$http.delete(url+"/delete/" + item.id)
+          get("/shop/newProduct/delete/" + item.id)
               .then(() => {
                 // 删除成功
                 this.$message.success("删除成功！");
