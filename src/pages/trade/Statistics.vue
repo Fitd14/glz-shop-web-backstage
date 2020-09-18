@@ -7,9 +7,17 @@
                 stripe style="width: 100%;" height='550' ref="multipleTable">
         <el-table-column prop="id" label="ID"></el-table-column>
         <el-table-column prop="orderNo" label="订单号"></el-table-column>
-        <el-table-column prop="commodityId" label="商品ID"></el-table-column>
+        <el-table-column prop="commodityId" label="商品ID">
+        </el-table-column>
         <el-table-column prop="memo" label="描述"></el-table-column>
-        <el-table-column prop="status" label="审核状态（0:待审核，1：通过，2：驳回）">
+        <el-table-column prop="img" label="图片描述">
+          <template slot-scope="scope">
+            <div>
+              <img style="width: 120px;height: 150px" :src="scope.row.img"/>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="审核状态">
           <template slot-scope="scope">
             <div v-text="setStatus(scope.row)"></div>
           </template>
@@ -18,14 +26,14 @@
         <el-table-column label="操作" width="100%" fixed="right">
           <template slot-scope="scope">
             <el-button
-              size="mini" @click="handleEdit(scope.row)" v-text="">
-              {{message1}}
+              size="mini" @click="goDetails(scope.row)" v-text="">
+              查看详情
             </el-button>
             <br/>
-            <el-button
-              size="mini"
-              type="danger" @click="handleDelete(scope.row)">{{message2}}
-            </el-button>
+            <!--  <el-button
+                size="mini"
+                type="danger" @click="handleDelete(scope.row)">{{message2}}
+              </el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -45,8 +53,8 @@
 </template>
 <script>
   import axios from 'axios';
-
-  const url = 'http://localhost:8070';
+  import {get, post} from "../../common/js/http";
+  import baseUrl from '../../common/js/config'
   // 导入自定义的表单组件
   export default {
     data() {
@@ -66,12 +74,33 @@
     mounted() {
     },
     created() {
-      axios.get(url + '/orderBack/getAll').then(res => {
+      this.beginning();
+      /*axios.get(url + '/orderBack/getAll').then(res => {
         this.datas = res.data;
         this.totalNum = this.datas.length;
-      });
+      });*/
     },
     methods: {
+      beginning() {
+        get('/orderBack/getAll').then(res => {
+          this.datas = res.data;
+          this.totalNum = this.datas.length;
+        });
+      },
+      goodsName(val) {
+        this.getOne(val).then(resp => {
+          console.log(resp.commoditySubHead);
+          return resp.commoditySubHead
+        })
+      },
+      getOne(value) {
+        return new Promise((resolve, reject) => {
+          get('/commodity/selectOne/' + value).then(res => {
+            console.dir(res.data)
+            resolve(res.data);
+          })
+        })
+      },
       setStatus(row) {
         if (row.status === 0) {
           return '待审核';
@@ -89,6 +118,9 @@
         console.log(`当前页: ${val}`);
         this.currentPage = val;    //动态改变
       },
+      goDetails(row) {
+        this.$router.push({name: 'OrderBack', query: {id: row.id, cid: row.commodityId, orderNo: row.orderNo}})
+      },
       handleEdit(row) {
         this.$confirm('是否要通过该申请', '提示', {
           confirmButtonText: '确定',
@@ -97,13 +129,13 @@
         }).then(() => {
           row.status = 1;
           console.dir(row);
-          axios.post(url + '/orderBack/udp', row).then(res => {
+          post('/orderBack/udp', row).then(res => {
             console.dir(res.data);
-            axios.get(url + '/orderItem/getByOCid?orderNo=' + row.orderNo + '&' + 'cid=' + row.commodityId).then(res => {
+            get('/orderItem/getByOCid?orderNo=' + row.orderNo + '&' + 'cid=' + row.commodityId).then(res => {
               console.dir('-------------')
               this.temp = res.data;
               this.temp.status = 3;
-              axios.post(url + '/orderItem/udp', this.temp).then(res => {
+              post('/orderItem/udp', this.temp).then(res => {
                 console.dir('***************')
                 console.dir(this.temp);
               });

@@ -1,17 +1,27 @@
 <template>
-  <div>n
+  <div>
     <div>
       <el-table border
                 :data="datas.slice((currentPage-1)* pageSize,currentPage* pageSize)"
                 :current-page.sync="currentPage"
                 stripe style="width: 100%;" height='550' ref="multipleTable">
-        <el-table-column prop="id" label="ID"></el-table-column>
+        <el-table-column prop="id" v-if="false" label="ID"></el-table-column>
         <el-table-column prop="orderNo" label="订单编号"></el-table-column>
         <el-table-column prop="userId" label="用户ID"></el-table-column>
         <el-table-column prop="commodityId" label="商品ID"></el-table-column>
+        <el-table-column prop="commoditySubHead" label="商品名称"></el-table-column>
+        <el-table-column prop="img" label="商品图片">
+          <template slot-scope="scope">
+            <el-image :src="scope.row.img"></el-image>
+          </template>
+        </el-table-column>
         <el-table-column prop="number" label="数量"></el-table-column>
         <el-table-column prop="price" label="价格（元）"></el-table-column>
-        <el-table-column prop="status" label="状态"></el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            <div v-text="changeStatus(scope.row.status)"></div>
+          </template>
+        </el-table-column>
         <el-table-column prop="memo" label="备注"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column prop="updateTime" label="更新时间"></el-table-column>
@@ -45,6 +55,8 @@
 </template>
 <script>
   import axios from 'axios';
+  import {get} from '../../common/js/http'
+  import baseUrl from '../../common/js/config'
 
   const url = 'http://localhost:8070';
   // 导入自定义的表单组件
@@ -65,17 +77,27 @@
     created() {
       this.id = this.$route.query.id
       console.dir(this.id);
-      axios.get(url + '/orderItem/list?orderNo=' + this.id).then(res => {
+      get('/orderItem/list?orderNo=' + this.id).then(res => {
         this.datas = res.data;
         this.totalNum = this.datas.length;
       });
+      /* axios.get(url + '/orderItem/list?orderNo=' + this.id).then(res => {
+         this.datas = res.data;
+         this.totalNum = this.datas.length;
+       });*/
     },
     methods: {
-      setSta(val) {
+      changeStatus(val) {
         if (val === 0) {
-          this.stata = "dfsafd";
+          return '未发货';
+        } else if (val === 1) {
+          return '已发货';
+        } else if (val === 2) {
+          return '已申请退货';
+        } else if (val === 3) {
+          return '已退货';
         } else {
-          this.stata = "val";
+          return '退货失败';
         }
       },
       handleSizeChange(val) {
@@ -87,7 +109,7 @@
         this.currentPage = val;    //动态改变
       },
       handleEdit(row) {
-        this.$router.push({name: 'AddAddress', params: {id: row.id}})
+        this.$router.push({name: 'OrderBack', query: {id: row.id, cid: row.commodityId, orderNo: row.orderNo}})
       },
       handleDelete(row) {
         console.log(row.id);
@@ -96,7 +118,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          axios.get(url + '/orderItem/orderItem/list' + row.id).then(res => {
+          get('/orderItem/orderItem/list' + row.id).then(res => {
             if (res.data.code === '200') {
               this.reload();
               console.dir('success');

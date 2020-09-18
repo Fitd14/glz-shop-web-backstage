@@ -56,8 +56,9 @@
 </template>
 <script>
   import axios from 'axios';
+  import {get} from '../../common/js/http';
+  import baseUrl from '../../common/js/config'
 
-  const url = 'http://localhost:8070';
   // 导入自定义的表单组件
   export default {
     data() {
@@ -82,13 +83,19 @@
     },
     methods: {
       begin() {
-        axios.get(url + '/order/all').then(res => {
-          console.dir(url + '/order/all')
+        get('/order/all').then(res => {
           console.dir(res.data);
           this.datas = res.data;
           this.totalNum = this.datas.length;
           this.tableDataEnd = this.datas;
         });
+        /*  axios.get(url + '/order/all').then(res => {
+            console.dir(url + '/order/all')
+            console.dir(res.data);
+            this.datas = res.data;
+            this.totalNum = this.datas.length;
+            this.tableDataEnd = this.datas;
+          });*/
       },
       currentChangePage(list) {
         let from = (this.currentPage - 1) * this.pageSize;
@@ -159,7 +166,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          axios.get(url + '/ship/area/del/' + row.id).then(res => {
+          get('/ship/area/del/' + row.id).then(res => {
             if (res.data.code === '200') {
               this.reload();
               console.dir('success');
