@@ -128,7 +128,6 @@
       },
       addNewProduct() {
         // 修改标记
-        this.isEdit = false;
         // 控制弹窗可见：
         this.show = true;
         // 把oldBrand变为null
@@ -139,7 +138,6 @@
         get("/shop/newProduct/getId/" + oldBrand.id)
             .then(({data}) => {
               // 修改标记
-              this.isEdit = false;
               // 控制弹窗可见：
               this.show = true;
               // 获取要编辑的brand
@@ -149,7 +147,7 @@
             })
       },
       deleteBrand(item) {
-        this.$message.confirm('此操作将永久删除该品牌, 是否继续?').then(() => {
+        this.$confirm('此操作将永久删除该品牌, 是否继续?').then(() => {
           // 发起删除请求
           get("/shop/newProduct/delete/" + item.id)
               .then(() => {

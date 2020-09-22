@@ -105,12 +105,7 @@
       };
     },
     mounted() { // 渲染后执行
-      //查询数据
-       get("/commodityCategory/selByParentId/0").then(res=>{
-         this.groups = res.data;
-         // 完成赋值后，把加载状态赋值为false
-         this.loading = false;
-       });
+      this.seltype();
     },
     watch: {
       id() {
@@ -119,6 +114,14 @@
     },
 
     methods: {
+      seltype() {
+        //查询数据
+        get("/commodityCategory/selByParentId/0").then(res=>{
+          this.groups = res.data;
+          // 完成赋值后，把加载状态赋值为false
+          this.loading = false;
+        });
+      },
       rollback() {
         get("/commodityCategory/selByParentId/"+0).then(res =>{
           this.groups = res.data;
@@ -160,6 +163,16 @@
         post("/commodityCategory/update",this.group);
       },
       addGroup() {
+        this.group = {
+          id:'',
+          name: '',
+          level:'',
+          navStatus:'',
+          showStatus:'',
+          keywords:'',
+          parentId:'',
+          children:'',
+        };
         this.show = true;
         this.isEdit = false;
       },
@@ -177,9 +190,11 @@
       save(pojo) {
         if (pojo.parentId == ''){
             pojo.parentId = 0;
-           post('/commodityCategory/add', pojo);
-          this.show=false;
-          this.loadData();
+           post('/commodityCategory/add', pojo).then(()=>{
+             this.show=false;
+
+             this.loadData();
+           });
         }else {
            post('/commodityCategory/add', pojo).then((reset) => {
               console.log(reset.data);

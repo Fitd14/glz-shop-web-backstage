@@ -37,7 +37,7 @@
     </v-col>
     <v-spacer></v-spacer></v-row>
     <!--开始时间选择结束-->
-    
+
 <!--结束时间选择器-->
     <v-row>
     <v-col cols="12" sm="6" md="4">
@@ -78,7 +78,7 @@
     <v-text-field v-model="brand.url" label="链接地址"/>
     <v-text-field v-model="brand.note" label="备注"/>
     <v-text-field v-model="brand.sort" label="序号"/>
-  
+
     <v-layout row>
       <v-flex xs3>
         <span style="font-size: 16px; color: #444">广告图片：</span>
@@ -86,16 +86,16 @@
       <v-flex>
         <v-upload
           v-model="brand.pic"
-          url="file/adds"
+          url="/file/adds"
           :multiple="false"
           :pic-width="230"
           :pic-height="120"
         />
       </v-flex>
     </v-layout>
-    
+
     <v-layout class="my-4" row>
-      
+
       <v-spacer/>
       <v-btn @click="submit" color="primary">提交</v-btn>
       <v-btn @click="clear">重置</v-btn>
@@ -103,6 +103,8 @@
   </v-form>
 </template>
 <script>
+  import {post} from "../../common/js/http";
+
   export default {
     name: "adver-form",
     props: {
@@ -116,11 +118,11 @@
     },
     data() {
       return {
-        valid: false, // 表单校验结果标记
+        //valid: false, // 表单校验结果标记
         brand: {
           id: '',
           name: '', // 品牌名称
-          type: 0, 
+          type: 0,
           pic: '',
           startTime: new Date().toISOString().substr(0, 10),
           endTime: new Date().toISOString().substr(0, 10),
@@ -129,7 +131,7 @@
           orderCount: 0, //下单量
           url: '', //链接地址
           note: '',//备注
-          sort: 0,//排序 
+          sort: 0,//排序
         },
         // 品牌名称校验
         nameRules: [
@@ -151,11 +153,12 @@
           const {...params} = this.brand;
           // 将数据提交到后台
           // this.$http.post('/item/brand', this.$qs.stringify(params))
-          this.$http({
+          post("/shop/adver/create",this.$qs.stringify(params))
+          /*this.$http({
             method: this.isEdit ? 'put' : 'post', // 动态判断是POST还是PUT
             url: 'http://localhost:80/shop/adver/create',
             data: this.$qs.stringify(params)
-          }).then(() => {
+          })*/.then(() => {
             // 关闭窗口
             this.$emit("close");
             // 弹出提示

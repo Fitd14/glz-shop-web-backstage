@@ -16,6 +16,8 @@
   </v-form>
 </template>
 <script>
+  import {post} from "../../common/js/http";
+
   export default {
     name: "newProduct-form",
     props: {
@@ -53,11 +55,12 @@
           const {...params} = this.brand;
           // 将数据提交到后台
           // this.$http.post('/item/brand', this.$qs.stringify(params))
-          this.$http({
+          post("/shop/newProduct/addProduct",this.$qs.stringify(params))
+         /* this.$http({
             method: this.isEdit ? 'put' : 'post', // 动态判断是POST还是PUT
             url: 'http://localhost:80/shop/newProduct/addProduct',
             data: this.$qs.stringify(params)
-          }).then(() => {
+          })*/.then(() => {
             // 关闭窗口
             this.$emit("close");
             // 弹出提示

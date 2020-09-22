@@ -6,6 +6,9 @@
     </v-stepper-header>
     <v-stepper-items>
       <v-stepper-content step="1">
+        <v-flex xs3 offset-xs9>
+          <v-btn color="info" @click="rollback()">返回</v-btn>
+        </v-flex>
         <v-flex class="xs10 mx-auto">
           <v-form v-model="valid" ref="basic">
 
@@ -86,7 +89,6 @@
           </v-form>
         </v-flex>
         <v-flex xs3 offset-xs9>
-          <v-btn color="info" @click="rollback()">返回</v-btn>
           <v-btn color="info" @click="submit(goods)">保存修改商品信息</v-btn>
         </v-flex>
       </v-stepper-content>

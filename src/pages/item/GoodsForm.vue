@@ -60,7 +60,8 @@
                           hide-details/>
             <v-text-field label="商品详情" v-model="goods.productDetail" :counter="1000"
                           hide-details/>
-            <v-layout row>
+            <div></div>
+            <v-layout row style="margin-top: 30px">
               <v-flex xs3>
                 <span style="font-size: 16px; color: #444">商品图片：</span>
               </v-flex>

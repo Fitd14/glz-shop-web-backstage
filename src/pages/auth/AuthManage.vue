@@ -36,7 +36,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormModify = false">取 消</el-button>
-        <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        <el-button type="primary" @click="confirmModify">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -106,8 +106,8 @@
         console.log(this.roleUserData.roleId);
         console.log(this.roleUserData.userId);
         post(api+"user/save",this.roleUserData).then(resp =>{
+          this.getRoleAuthAll();
         })
-        this.getRoleAuthAll();
       },
       del(index,row){
         this.$confirm('是否删除?', '提示', {
