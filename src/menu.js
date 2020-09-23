@@ -11,9 +11,9 @@ var menus = [
     path:"/item",
     items: [
       { title: "分类管理", path: "/specGroup" },
-      { title: "品牌管理", path: "/brand" },
+      // { title: "品牌管理", path: "/brand" },
       { title: "商品列表", path: "/list" },
-      { title: "规格参数", path: "/specification" }
+      // { title: "规格参数", path: "/specification" }
     ]
   },
   {

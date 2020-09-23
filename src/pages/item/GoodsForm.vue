@@ -13,7 +13,6 @@
                 v-model="parentTypeId"
                 @change="selectExitSelectConfig"
                 placeholder="请选择商品類型"
-
               >
                 <el-option
                   v-for="item in type"

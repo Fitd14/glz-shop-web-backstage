@@ -30,9 +30,8 @@
       </template>
     </v-data-table>
 
-    <v-btn color='primary' @click="addGroup">新增分组</v-btn>
-    <v-btn color='primary' @click="rollback">返回上一级</v-btn>
-
+    <v-btn color='primary' @click="addGroup" v-if="subclass == true">新增分组</v-btn>
+    <v-btn color='primary' @click="rollback()" v-if="subclass==false">返回上级</v-btn>
     <v-dialog v-model="show" width="300" height="200">
       <v-card>
         <v-card-title>{{isEdit ? '修改' : '新增'}}分组</v-card-title>
@@ -82,6 +81,7 @@
     },
     data() {
       return {
+        subclass: true,
         groups: [],
         loading: true, // 是否在加载中
         headers: [
@@ -123,6 +123,7 @@
         });
       },
       rollback() {
+        this.subclass = true;
         get("/commodityCategory/selByParentId/"+0).then(res =>{
           this.groups = res.data;
           console.dir(this.type);
@@ -160,7 +161,7 @@
             this.group = res.data;
             console.log(this.group);
         });
-        post("/commodityCategory/update",this.group);
+        // post("/commodityCategory/update",this.group);
       },
       addGroup() {
         this.group = {
@@ -181,7 +182,7 @@
         post('/commodityCategory/update',pojo).then(()=>{
           this.isEdit=false;
           this.show=false;
-          this.$confirm("更新成功");
+          this.$Message.success("更新成功");
           this.loadData();
         }).catch(err=>{
           this.$confirm(err);
@@ -192,7 +193,6 @@
             pojo.parentId = 0;
            post('/commodityCategory/add', pojo).then(()=>{
              this.show=false;
-
              this.loadData();
            });
         }else {
@@ -221,6 +221,7 @@
       },
 
       selSubClass(pojo) {
+        this.subclass = false;
         if (pojo.children==null){
           // 完成赋值后，把加载状态赋值为false
           this.groups = [];

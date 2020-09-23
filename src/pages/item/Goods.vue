@@ -3,27 +3,30 @@
     <v-toolbar class="elevation-0">
       <v-btn color="primary" @click="addGoods" >新增商品</v-btn>
       <v-spacer/>
-      <v-flex xs3>
-        <v-btn-toggle mandatory v-model.lazy="filter.saleable">
-          <v-btn flat :value=2>
-            其他：全部
-          </v-btn>
-          <v-btn flat :value=0>
-            0：上架
-          </v-btn>
-          <v-btn flat :value=1>
-            1：下架
-          </v-btn>
+      <v-flex xs8>
+        <v-btn-toggle mandatory >
+          <el-input v-model="goods.commodityName" placeholder="搜索商品名" style="width: 200px"></el-input>
+            <el-select class="el-select"
+                       v-model="goods.category"
+                       placeholder="请选择商品類型"
+                       style="width: 200px"
+            >
+              <el-option
+                v-for="item in type"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          <el-switch
+            v-model="goods.putawayStatus"
+            active-text="上架"
+            @change="textchange"
+            inactive-text="下架">
+          </el-switch>
+          <el-button @click="selLikeOption(goods)">搜索</el-button>
+          <el-button @click="relaseSel">重置</el-button>
         </v-btn-toggle>
-      </v-flex>
-      <v-flex xs3>
-        <v-text-field
-          append-icon="search"
-          label="搜索"
-          single-line
-          hide-details
-          v-model="filter.putawayStatus"
-        />
       </v-flex>
     </v-toolbar>
     <v-divider/>
@@ -36,12 +39,12 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.id }}</td>
+        <!--<td class="text-xs-center">{{ props.item.id }}</td>-->
         <td class="text-xs-center">
           <img :src="props.item.photo" width="80" height="40" >
         </td>
         <td class="text-xs-center">{{props.item.commodityName }}</td>
-        <td class="text-xs-center">{{props.item.category}}</td>
+        <td class="text-xs-center" >{{props.item.category}}</td>
         <td class="text-xs-center">{{props.item.brand }}</td>
         <td class="text-xs-center">{{props.item.price}}</td>
         <td class="text-xs-center">{{props.item.createTime }}</td>
@@ -73,9 +76,8 @@
     name: "goods",
     data() {
       return {
+        type: [],
         filter: {
-          saleable: true, // 上架还是下架
-          putawayStatus: '', // 搜索过滤字段
           pageNo: 0,
           pageSize: 0,
         },
@@ -86,23 +88,37 @@
         }, // 分页信息
         goodtype: {},//商品分类信息
         headers: [
-          {text: 'id', align: 'center', sortable: false, value: 'id'},
+          //{text: 'id', align: 'center', sortable: false, value: 'id'},
           {text: '照片', align: 'center', sortable: false, value:'photo'},
-          {text: '标题', align: 'center', sortable: false, value: 'commodityName'},
-          {text: '商品分类', align: 'center', sortable: false, value: 'category'},
+          {text: '商品名称', align: 'center', sortable: false, value: 'commodityName'},
+           {text: '商品分类', align: 'center', sortable: false, value: 'category'},
           {text: '品牌', align: 'center', sortable: false, value: 'brand'},
           {text: '价格', align: 'center', sortable: false, value: 'price'},
           {text: '创建时间', align: 'center', sortable: false, value: 'createTime'},
           {text: '跟新时间', align: 'center', value: 'updateTime', sortable: false,},
           {text: '操作', align: 'center', sortable: false}
         ],
+        isOne: '',
         show: false,// 控制对话框的显示
         oldGoods: {}, // 即将被编辑的商品信息
         isEdit: false, // 是否是编辑
         step: 1, // 子组件中的步骤线索引，默认为1
         baseImg:[],
-        imgShow:''
+        imgShow:'',
+        goods:{
+          commodityName:'',
+          brand:'',
+          putawayStatus: true, // 搜索过滤字段
+          price: '',
+          category:'',
+        }
       }
+    },
+    created() {
+      get("/commodityCategory/selAll").then(res=>{
+        console.log(res.data);
+        this.type = res.data;
+      })
     },
     mounted() { // 渲染后执行
       // 查询数据
@@ -114,23 +130,103 @@
         deep: true, // deep为true，会监视pagination的属性及属性中的对象属性变化
         handler() {
           // 变化后的回调函数，这里我们再次调用getDataFromServer即可
-          this.getDataFromServer();
+          if (this.isOne ==1) {
+            this.getDataFromServer();
+          }else {
+            this.selLikeOption();
+          }
         }
       },
       filter: {// 监视搜索字段
         handler() {
-          this.getDataFromServer();
+          if (this.isOne ==1) {
+            this.getDataFromServer();
+          }else {
+            this.selLikeOption();
+          }
         },
         deep: true
       }
     },
     methods: {
+      relaseSel(){
+        location.reload();
+      },
+      textchange(){
+        //console.log(this.goods.putawayStatus);
+      },
+      selLikeOption(item){
+        this.isOne =2;
+        if (item.putawayStatus == true){
+          console.log(this.goods.putawayStatus);
+          item.putawayStatus = 1;
+        }else {
+          console.log(this.goods.putawayStatus);
+          item.putawayStatus = 0;
+        }
+        console.log(item);
+        if (item.category =='' && item.commodityName ==''){
+          get("/commodity/sel",{putawayStatus: item.putawayStatus
+          ,pageNo: this.pagination.page-1,// 当前页
+            pageSize: this.pagination.rowsPerPage}).then(res=>{
+              if (res.data == null){
+                this.$message.error("没有此商品")
+              }
+            console.log(res.data);
+            this.goodsList = res.data;
+            this.goods.putawayStatus = item.putawayStatus==true?true:false;
+          })
+        }else if (item.category =='' && item.commodityName !=''){
+          get("/commodity/sel",{commodityName: item.commodityName,
+            putawayStatus: item.putawayStatus,pageNo: this.pagination.page-1,// 当前页
+            pageSize: this.pagination.rowsPerPage}).then(res=>{
+            if (res.data == null){
+              this.$message.error("没有此商品")
+            }
+            console.log(res.data);
+            this.goodsList = res.data;
+            this.goods.putawayStatus = item.putawayStatus==true?true:false;
+          }).catch(() => {
+            this.$message.error("没有此商品！");
+          });
+        }else if (item.category !='' && item.commodityName ==''){
+          get("/commodity/sel",{
+            category: item.category,putawayStatus: item.putawayStatus
+          ,pageNo: this.pagination.page-1,// 当前页
+            pageSize: this.pagination.rowsPerPage}).then(res=>{
+            if (res.data == null){
+              this.$message.error("没有此商品")
+            }
+            console.log(res.data);
+            this.goodsList = res.data;
+            this.goods.putawayStatus = item.putawayStatus==true?true:false;
+          }).catch(() => {
+            this.$message.error("没有此商品！");
+          });
+        }else {
+          get("/commodity/sel", {
+            commodityName: item.commodityName,
+            category: item.category, putawayStatus: item.putawayStatus
+            ,pageNo: this.pagination.page-1,// 当前页
+            pageSize: this.pagination.rowsPerPage
+          }).then(res => {
+            if (res.data == null){
+              this.$message.error("没有此商品")
+            }
+            this.goodsList = res.data;
+            this.goods.putawayStatus = item.putawayStatus==true?true:false;
+          }).catch(() => {
+            this.$message.error("没有此商品！");
+          });
+        }
+      },
       getDataFromServer() { // 从服务的加载数的方法。
+        this.isOne = 1;
         //发起请求
         get("/commodity/sel",
           {
             // params: {
-            putawayStatus: this.filter.putawayStatus, // 搜索条件
+            //putawayStatus: this.filter.putawayStatus, // 搜索条件
             //saleable:  this.filter.saleable, // 上下架
             pageNo: this.pagination.page-1,// 当前页
             pageSize: this.pagination.rowsPerPage,// 每页大小
@@ -192,7 +288,14 @@
         }
       },
       CheckShop(item) {
-        this.$router.push({name:'CheckGoodsForm',params:{"checkId":item.id}})
+        get('/user/getInfo').then(res=>{
+          console.log(res.data.id);
+          if (res.data.id ==null){
+            this.$router.push({name:'Login'});
+          }else {
+            this.$router.push({name:'CheckGoodsForm',params:{"checkId":item.id}})
+          }
+        })
       },
       closeWindow() {
         console.log(1)
