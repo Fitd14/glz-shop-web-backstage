@@ -18,7 +18,7 @@
               <img src="../assets/2.jpeg">
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title> </v-list-tile-title>
+                <el-button type="text" @click="logout">退出登录</el-button>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -120,51 +120,31 @@
         miniVariant: false,// 左侧导航是否收起
         title: '高老庄商城后台管理',// 顶部导航条名称,
         menuMap: {},
-        menus:{}
+        userMenus:{}
       }
     },
     computed: {
       items() {
-        return this.menus;
+        return this.userMenus;
       },
-      // item1() {
-      //   const arr = this.$route.path.split("/");
-      //   return this.menuMap[arr[1]];
-      // },
-      // item2() {
-      //   const arr = this.$route.path.split("/");
-      //   return this.menuMap[arr[1]][arr[2]];
-      // }
     },
     name: 'App',
     watch: {},
     created() {
-      let childMenu = new Array();
       get("/menu/getUserMenu").then(resp =>{
-        this.menus = resp.data;
-        console.log(resp);
-        if(resp.data.pid !== "0"){
-          childMenu.push(resp);
-        }else{
-          const p1 = resp.data.uri.slice(1);
-          this.menuMap[p1] = {name: resp.data.name,uri: resp.data.uri};
-          if(childMenu.length > 0){
-            childMenu.forEach(i =>{
-              this.menuMap[p1][i.uri.slice(1)] = i.name;
-            })
-          }
-        }
+        this.userMenus = resp.data;
       })
     },
     methods: {
       handleOpen(key, keyPath) {
-        console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
+      },
+      logout(){
+        get('/logout');
+        this.$router.push('/login');
       }
     }
-
   }
 </script>
 
