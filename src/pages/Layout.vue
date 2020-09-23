@@ -53,7 +53,7 @@
       <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" unique-opened router>
         <el-submenu v-for="item in items" :index="item.id" :key="item.id">
           <span slot="title" v-text="item.name"></span>
-          <el-menu-item-group v-for="subItem in item.permissions" :key="item.id">
+          <el-menu-item-group v-for="subItem in item.permissions" :key="subItem.id">
             <el-menu-item :index="subItem.id" v-text="subItem.name" :route="subItem.uri"></el-menu-item>
           </el-menu-item-group>
         </el-submenu>
