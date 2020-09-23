@@ -142,6 +142,7 @@
       },
       logout(){
         get('/logout');
+        this.$store.commit('del_token');
         this.$router.push('/login');
       }
     }

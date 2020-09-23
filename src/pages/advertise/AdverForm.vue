@@ -73,11 +73,11 @@
                 <label for="runoob">下线</label>&nbsp;&nbsp;&nbsp;
                 <input type="radio" value="1" v-model="brand.status">
                 <label for="google">上线</label><br></p>
-    <v-text-field v-model="brand.clickCount" label="点击量"/>
-    <v-text-field v-model="brand.orderCount" label="订单量"/>
+   <!-- <v-text-field v-model="brand.clickCount" label="点击量"/>
+    <v-text-field v-model="brand.orderCount" label="订单量"/>-->
     <v-text-field v-model="brand.url" label="链接地址"/>
     <v-text-field v-model="brand.note" label="备注"/>
-    <v-text-field v-model="brand.sort" label="序号"/>
+    <!--<v-text-field v-model="brand.sort" label="序号"/>-->
 
     <v-layout row>
       <v-flex xs3>

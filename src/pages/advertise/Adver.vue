@@ -6,9 +6,9 @@
       <!--搜索框，与search属性关联-->
       <!--空间隔离组件-->
       <v-spacer/>
-      <v-flex xs3>
+      <!-- <v-flex xs3>
         <v-text-field label="输入关键字搜索" v-model.lazy="search" append-icon="search" hide-details/>
-      </v-flex>
+      </v-flex> -->
     </v-card-title>
     <v-divider/>
     <!--列表-->
@@ -34,11 +34,11 @@
         <td class="text-xs-center">
           <p v-if="props.item.status=0">下线</p><p v-else-if="props.item.status=1">上线</p>
           </td>
-        <td class="text-xs-center">{{ props.item.clickCount }}</td>
-        <td class="text-xs-center">{{ props.item.orderCount }}</td>
+       <!-- <td class="text-xs-center">{{ props.item.clickCount }}</td>
+        <td class="text-xs-center">{{ props.item.orderCount }}</td>-->
         <td class="text-xs-center">{{ props.item.url }}</td>
         <td class="text-xs-center">{{ props.item.note }}</td>
-        <td class="text-xs-center">{{ props.item.sort }}</td>
+        <!--<td class="text-xs-center">{{ props.item.sort }}</td>-->
         <!--编辑按钮-->
         <td class="justify-center layout px-0">
           <v-btn icon @click="editBrand(props.item)">
