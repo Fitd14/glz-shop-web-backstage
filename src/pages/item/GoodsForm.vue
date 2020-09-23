@@ -48,12 +48,12 @@
                           hide-details/>
             <v-text-field label="商品价格" v-model="goods.price" :counter="1000"
                           hide-details/>
-            <v-text-field label="商品长度" v-model="goods.length" :counter="1000"
+            <v-text-field label="商品长度(cm)" v-model="goods.length" :counter="1000"
                           hide-details/>
-            <v-text-field label="商品宽度" v-model="goods.width" :counter="1000"
+            <v-text-field label="商品宽度(cm)" v-model="goods.width" :counter="1000"
                           hide-details/>
-            <v-text-field label="商品高度" v-model="goods.height" :counter="200" hide-details/>
-            <v-text-field label="商品重量" v-model="goods.weight" :counter="1000"
+            <v-text-field label="商品高度(cm)" v-model="goods.height" :counter="200" hide-details/>
+            <v-text-field label="商品重量(kg)" v-model="goods.weight" :counter="1000"
                           hide-details/>
             <v-text-field label="商品属性" v-model="goods.specificType" :counter="1000"
                           hide-details/>
