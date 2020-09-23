@@ -23,7 +23,11 @@
               <p v-text="fixIsNull(scope.row.nickname)"></p>
             </template>
           </el-table-column>
-          <el-table-column prop="status" label="状态"></el-table-column>
+          <el-table-column prop="status" label="状态">
+            <template slot-scope="scope">
+              <p>{{scope.row.status == 0 ? '正常' : '已禁用'}}</p>
+            </template>
+          </el-table-column>
           <el-table-column prop="created" label="创建时间"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -51,7 +55,7 @@
           <el-input v-model="userData.nickname" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="状态" :label-width="dialogWidth">
-          <el-switch v-model="userData.status" active-text="禁用账户" inactive-text="启用账户" active-color="#ff4949" inactive-color="#13ce66"></el-switch>
+          <el-switch v-model="userData.status === 0 ? true : false" active-text="启用账户" inactive-text="禁用账户" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -92,7 +96,6 @@
   import {del, post, put, get} from "../../common/js/http";
   const api = '/user/';
   export default {
-
     data(){
       return {
         userDataAll:[],
@@ -117,8 +120,6 @@
     methods: {
       getUserAll() {
         get(api+"all").then(resp => {
-          console.log(resp);
-          console.log(resp.data[0].id);
           this.userDataAll = resp.data;
         });
       },
@@ -130,10 +131,11 @@
       },
       confirmModify(){
         this.dialogFormModify = false;
+        console.log(this.userData.status);
         if(this.userData.status === false){
-          this.userData.status = 1;
-        }else{
           this.userData.status = 0;
+        }else{
+          this.userData.status = 1;
         }
         put(api+"put",this.userData).then(resp =>{
           this.getUserAll();

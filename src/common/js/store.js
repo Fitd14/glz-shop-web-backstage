@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state:{
     token:'',
-    refToken:''
+    refToken:'',
+    menus:[],
   },
   mutations:{
     set_token(state, token, refToken) {
@@ -17,6 +18,10 @@ export default new Vuex.Store({
     del_token(state) {
       state.token = ''
       sessionStorage.removeItem('token')
+    },
+    set_menus(state,menus){
+      state.menus = menus;
+      //sessionStorage.menus = menus;
     }
   }
 })
