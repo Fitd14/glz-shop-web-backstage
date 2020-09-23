@@ -66,11 +66,12 @@
       },
       getRoleMenuAll() {
         get("role/menu/getRoleMenu/user/"+this.userId).then(resp => {
-          for(let i = 0;i < resp.data.length;i++){
-            this.checkedMenuData[i] = resp.data.menuAll[i].id;
+          let index = 0
+          for(let i = 0;i < resp.data.menuAll.length;i++){
+            this.checkedMenuData[index] = resp.data.menuAll[i].id;
+            index++;
           }
           this.$refs.tree.setCheckedKeys(this.checkedMenuData);
-          console.log(this.checkedMenuData);
         });
       },
     }

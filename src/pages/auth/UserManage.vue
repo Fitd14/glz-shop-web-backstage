@@ -8,9 +8,21 @@
       <el-col>
         <el-table :data="userDataAll" style="width: 100%">
           <el-table-column prop="username" label="用户名" ></el-table-column>
-          <el-table-column prop="phone" label="手机号"></el-table-column>
-          <el-table-column prop="email" label="邮箱"></el-table-column>
-          <el-table-column prop="nickname" label="昵称"></el-table-column>
+          <el-table-column prop="phone" label="手机号">
+            <template slot-scope="scope">
+              <p v-text="fixIsNull(scope.row.phone)"></p>
+            </template>
+          </el-table-column>
+          <el-table-column prop="email" label="邮箱">
+            <template slot-scope="scope">
+              <p v-text="fixIsNull(scope.row.email)"></p>
+            </template>
+          </el-table-column>
+          <el-table-column prop="nickname" label="昵称">
+            <template slot-scope="scope">
+              <p v-text="fixIsNull(scope.row.nickname)"></p>
+            </template>
+          </el-table-column>
           <el-table-column prop="status" label="状态"></el-table-column>
           <el-table-column prop="created" label="创建时间"></el-table-column>
           <el-table-column label="操作">
@@ -22,6 +34,8 @@
         </el-table>
       </el-col>
     </el-row>
+
+    <!--修改账户-->
     <el-dialog title="修改信息" :visible.sync="dialogFormModify" center="center">
       <el-form :model="userData">
         <el-form-item label="用户名" :label-width="dialogWidth">
@@ -45,6 +59,8 @@
         <el-button type="primary" @click="confirmModify">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!--添加账户-->
     <el-dialog title="添加账户" :visible.sync="dialogFormAdd" center="center">
       <el-form :model="userData">
         <el-form-item label="用户名" :label-width="dialogWidth">
@@ -83,6 +99,7 @@
         userData:{
           id: null,
           username:null,
+          password:null,
           phone:null,
           email: null,
           nickname: null,
@@ -124,9 +141,15 @@
       },
       confirmAdd(){
         this.dialogFormAdd = false;
-        post(api+"save",this.userData).then(resp =>{
+        const formData = new FormData();
+        formData.append("username",this.userData.username);
+        formData.append("password",this.userData.password);
+        formData.append("phone",this.userData.phone);
+        formData.append("email",this.userData.email);
+        formData.append("nickname",this.userData.nickname);
+        post(api+"save",formData).then(resp =>{
+          this.getUserAll();
         })
-        this.getUserAll();
       },
       del(index,row){
         this.$confirm('是否删除该账户?', '提示', {
@@ -135,7 +158,7 @@
           type: 'warning'
         }).then(() => {
           del(api+row.id).then(reps =>{
-            this.getRoleAll();
+            this.getUserAll();
           })
         }).catch(() => {
           this.$message({
@@ -147,6 +170,13 @@
       },
       openAddDialog(){
         this.dialogFormAdd = true;
+      },
+      fixIsNull(data){
+        if(data !== 'null'){
+          return data;
+        }else {
+          return ' ';
+        }
       }
     },
   }

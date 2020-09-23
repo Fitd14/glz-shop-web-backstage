@@ -58,10 +58,13 @@
       },
       getRoleMenuAll() {
         get("role/menu/getRoleMenu/role/"+this.modifyData.roleId).then(resp => {
-          for(let i = 0;i < resp.data.length;i++){
-            this.checkedMenuData[i] = resp.data.menuAll[i].id;
+          if (resp.data.menuAll !== null){
+            for(let i = 0;i < resp.data.menuAll.length;i++){
+              this.checkedMenuData[i] = resp.data.menuAll[i].id;
+            }
           }
           this.$refs.tree.setCheckedKeys(this.checkedMenuData);
+          this.checkedMenuData = resp.data.menuAll;
         });
       },
       modifyRoleAuth(){
@@ -69,16 +72,16 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
         }).then(() => {
-          console.log(this.modifyData);
           put("/role/menu/put",this.modifyData).then(result =>{
             this.getRoleMenuAll();
             this.getMenuAll();
+            location.reload();
           })
         }).catch(() => {
         });
       },
       checkChange(data,checked,indeterminate){
-        if(checked === true && indeterminate != true) {
+        if(checked === true && indeterminate !== true) {
           for (let i = 0; i < this.menuDataAll.length; i++) {
             if (this.modifyData.menuIds[i] === data.id  ) {
               let split = this.modifyData.menuIds.splice(i,1);

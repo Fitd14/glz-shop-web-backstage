@@ -85,10 +85,11 @@
         })
       },
       confirmModify(){
-        this.dialogFormModify = false;
         put("/role/put",this.roleData).then(resp =>{
           this.getRoleAll();
-        })
+        });
+        this.dialogFormModify = false;
+        location.reload();
       },
       confirmAdd(){
         this.dialogFormAdd = false;
