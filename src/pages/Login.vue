@@ -48,6 +48,7 @@
 <script>
   import {get, post} from "../common/js/http";
   import config from "../common/js/config";
+  import menus from "../menu";
 
   export default {
     data () {
@@ -83,7 +84,7 @@
         }).then(resp =>{
           if(resp.code === "200"){
             this.$store.commit('set_token',resp.data.token,resp.data.refToken);
-            this.$router.push({path:'/index/dashboard'})
+            this.$router.push({path:'/index/dashboard'});
           }else{
             this.isUseCaptcha();
           }
