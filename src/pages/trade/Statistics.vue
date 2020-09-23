@@ -2,28 +2,31 @@
   <div>
     <div>
       <el-table border
+                :header-cell-style="{'text-align':'center'}"
                 :data="datas.slice((currentPage-1)* pageSize,currentPage* pageSize)"
                 :current-page.sync="currentPage"
-                stripe style="width: 100%;" height='550' ref="multipleTable">
-        <el-table-column prop="id" label="ID"></el-table-column>
-        <el-table-column prop="orderNo" label="订单号"></el-table-column>
-        <el-table-column prop="commodityId" label="商品ID">
+                stripe style="width: 100%;" size="mini" ref="multipleTable">
+        <el-table-column align="center" prop="id" label="ID"></el-table-column>
+        <el-table-column align="center" prop="orderNo" label="订单号"></el-table-column>
+        <el-table-column v-if="false" align="center" prop="commodityId" label="商品ID">
         </el-table-column>
-        <el-table-column prop="memo" label="描述"></el-table-column>
-        <el-table-column prop="img" label="图片描述">
+        <!--<el-table-column v-if="false" align="center" prop="commodityName" label="商品">
+        </el-table-column>-->
+        <el-table-column align="center" prop="memo" label="描述"></el-table-column>
+        <el-table-column align="center" prop="img" label="图片描述">
           <template slot-scope="scope">
             <div>
               <img style="width: 120px;height: 150px" :src="scope.row.img"/>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="审核状态">
+        <el-table-column prop="status" align="center" label="审核状态">
           <template slot-scope="scope">
             <div v-text="setStatus(scope.row)"></div>
           </template>
 
         </el-table-column>
-        <el-table-column label="操作" width="100%" fixed="right">
+        <el-table-column align="center" label="操作" width="100%" fixed="right">
           <template slot-scope="scope">
             <el-button
               size="mini" @click="goDetails(scope.row)" v-text="">
