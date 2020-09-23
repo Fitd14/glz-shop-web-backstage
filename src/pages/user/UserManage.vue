@@ -1,11 +1,18 @@
 <template>
   <el-card>
-    <div slot="header" >
-      <span>会员管理</span>
+    <div slot="header" class="header">
+      <el-row>
+        <el-col span="4">
+          <span style="margin-top: 10px;display: inline-flex">会员管理</span>
+        </el-col>
+        <el-col span="4" offset="16">
+          <el-input v-model="search" placeholder="输入关键字查找" size="mini" ></el-input>
+        </el-col>
+      </el-row>
     </div>
     <el-row >
       <el-col>
-        <el-table :data="member" style="width: 100%">
+        <el-table :data="member.filter(data => !search || data.username.toLowerCase().includes(search.toLowerCase()))" style="width: 100%" >
           <el-table-column prop="username" label="用户名称" ></el-table-column>
           <el-table-column prop="nickname" label="用户昵称" ></el-table-column>
           <el-table-column prop="phone" label="手机号"></el-table-column>
@@ -74,7 +81,8 @@
         dialogFormModify: false,
         dialogFormAdd: false,
         dialogWidth:'120px',
-        currentRow: null
+        currentRow: null,
+        search:'',
       }
     },
     created() {
@@ -139,6 +147,12 @@
         }else{
           return '未知'
         }
+      },
+      searchMember(){
+        get("/user/member/info/"+this.searchUsername).then(resp=>{
+          this.member = resp.data;
+        })
+        console.log(this.member);
       }
     }
   }
@@ -150,5 +164,8 @@
   }
   .el-main{
     background-color: #FFFFFF;
+  }
+  .header span{
+    margin-top: 10px;
   }
 </style>

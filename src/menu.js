@@ -1,4 +1,4 @@
-var menus = [
+let menus = [
   {
     action: "home",
     title: "首页",

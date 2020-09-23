@@ -56,6 +56,7 @@ const router = new Router({
         route("/trade/orderItem/:id", '/trade/OrderItem', "OrderItem"),
         route("/trade/statistics", '/trade/Statistics', "Statistics"),
         route("/trade/orderBack", '/trade/OrderBack', "OrderBack"),
+        route("/trade/countNum", '/trade/CountNum', "CountNum"),
       ]
     }
   ]

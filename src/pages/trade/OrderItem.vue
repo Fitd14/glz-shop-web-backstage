@@ -1,40 +1,45 @@
 <template>
   <div>
+    <div class="showtable">
+      <span><el-button style="float: right; padding: 3px 20px" @click="goBack()" type="text">返回</el-button></span>
+      <br/>
+    </div>
     <div>
       <el-table border
+                :header-cell-style="{'text-align':'center'}"
                 :data="datas.slice((currentPage-1)* pageSize,currentPage* pageSize)"
                 :current-page.sync="currentPage"
                 stripe style="width: 100%;" height='550' ref="multipleTable">
-        <el-table-column prop="id" v-if="false" label="ID"></el-table-column>
-        <el-table-column prop="orderNo" label="订单编号"></el-table-column>
-        <el-table-column prop="userId" label="用户ID"></el-table-column>
-        <el-table-column prop="commodityId" label="商品ID"></el-table-column>
-        <el-table-column prop="commoditySubHead" label="商品名称"></el-table-column>
-        <el-table-column prop="img" label="商品图片">
+        <el-table-column align="center" prop="id" v-if="false" label="ID"></el-table-column>
+        <el-table-column prop="orderNo" align="center" label="订单编号"></el-table-column>
+        <el-table-column v-if="false" prop="userId" align="center" label="用户ID"></el-table-column>
+        <el-table-column v-if="false" prop="commodityId" align="center" label="商品ID"></el-table-column>
+        <el-table-column prop="commoditySubHead" label="商品名称" align="center"></el-table-column>
+        <el-table-column prop="img" label="商品图片" align="center" >
           <template slot-scope="scope">
             <el-image :src="scope.row.img"></el-image>
           </template>
         </el-table-column>
-        <el-table-column prop="number" label="数量"></el-table-column>
-        <el-table-column prop="price" label="价格（元）"></el-table-column>
-        <el-table-column prop="status" label="状态">
+        <el-table-column prop="number" label="数量" align="center"></el-table-column>
+        <el-table-column prop="price" label="价格（元）" align="center"></el-table-column>
+        <el-table-column prop="status" label="状态" align="center">
           <template slot-scope="scope">
             <div v-text="changeStatus(scope.row.status)"></div>
           </template>
         </el-table-column>
-        <el-table-column prop="memo" label="备注"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column prop="updateTime" label="更新时间"></el-table-column>
-        <el-table-column label="操作" width="100%" fixed="right">
+        <el-table-column prop="memo" label="备注" align="center"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
+        <el-table-column prop="updateTime" label="更新时间" align="center"></el-table-column>
+        <el-table-column label="操作" width="100%" fixed="right" align="center">
           <template slot-scope="scope">
-            <el-button
+          <!--  <el-button
               size="mini" disabled @click="handleEdit(scope.row)">
               编辑
-            </el-button>
+            </el-button>-->
             <br/>
             <el-button
               size="mini"
-              type="danger" disabled @click="handleDelete(scope.row)">删除
+              type="danger"  @click="handleDelete(scope.row)">删除
             </el-button>
           </template>
         </el-table-column>
@@ -87,6 +92,9 @@
        });*/
     },
     methods: {
+      goBack() {
+        this.$router.go(-1);//返回上一层
+      },
       changeStatus(val) {
         if (val === 0) {
           return '未发货';
@@ -113,7 +121,7 @@
       },
       handleDelete(row) {
         console.log(row.id);
-        this.$confirm('是否要删除该品牌', '提示', {
+        this.$confirm('是否要删除', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
